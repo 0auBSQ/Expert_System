@@ -82,8 +82,12 @@ def check_parenthese(token):
         return False
 
 def check_left_right_rules(line):
-
     splitted = re.split(r'=>|<=>', line) ## cut the line in two part
+
+    ### Check number of implies (only one accepted)
+    if len(splitted) != 2: 
+        return line, "A rule can only implie once"
+
     ### Check parsing for each side
     if re.match(r'^(\(*!?[A-Z]\)*)([\+\|\^]\(*!?[A-Z]\)*)*$', splitted[0]) is None:
         return splitted[0], "Left Token is Bad"
