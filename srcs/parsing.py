@@ -185,11 +185,8 @@ def parse_input(params, env):
     else:
         parse_stdin(env)
 
+    env.init_rules() ### Init the rules obj with dict  key = rules string and value = None
+    # print(env.rules.dict)
+
     ### End of parsing
 
-
-
-
-
-
-    

@@ -31,6 +31,11 @@ class Env():
         self.adj_matrix = adj_matrix
         self.queries = []
 
+    def init_rules(self):
+        for elem in self.adj_matrix.columns.values:
+            self.rules.dict[elem] = None
+
+
 
 
 class Facts():
@@ -54,3 +59,9 @@ class Rules():
 
     def __init__(self):
         self.dict = {}
+
+
+class Node():
+
+    def __init__(self):
+        pass
