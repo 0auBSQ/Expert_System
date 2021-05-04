@@ -64,4 +64,6 @@ class Rules():
 class Node():
 
     def __init__(self):
-        pass
+        self.value = None
+        self.left = None
+        self.right = None
