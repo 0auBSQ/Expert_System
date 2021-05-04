@@ -4,6 +4,7 @@ import sys
 import re
 
 from srcs.const import *
+from srcs.nodes import *
 
 def parse_args():
 
@@ -186,7 +187,8 @@ def parse_input(params, env):
         parse_stdin(env)
 
     env.init_rules() ### Init the rules obj with dict  key = rules string and value = None
-    # print(env.rules.dict)
+    
+    create_rules_trees(env)
 
     ### End of parsing
 
