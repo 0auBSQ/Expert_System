@@ -90,7 +90,8 @@ def check_left_right_rules(line):
         return line, "A rule can only implie once"
 
     ### Check parsing for each side
-    if re.match(r'^(\(*!?[A-Z]\)*)([\+\|\^]\(*!?[A-Z]\)*)*$', splitted[0]) is None:
+    ###  re.match(r'^(\(*!?[A-Z]\)*)([\+\|\^]\(*!?[A-Z]\)*)*$'
+    if re.match(r'^((!?\()*!?[A-Z]\)*)([\+\|\^](!?\()*!?[A-Z]\)*)*$', splitted[0]) is None:
         return splitted[0], "Left Token is Bad"
     if re.match(r'^(\(*!?[A-Z]\)*)([\+\|\^]\(*!?[A-Z]\)*)*$', splitted[1]) is None:
         return splitted[1], "Right Token is Bad"
