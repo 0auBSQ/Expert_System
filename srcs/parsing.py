@@ -11,7 +11,8 @@ def parse_args():
     parser = argparse.ArgumentParser(description="expert-system")
     parser.add_argument("input_file", help="File with sets of rules, facts and queries (optional). If not given the program read on STDIN", nargs='?')
     parser.add_argument("--modify", "-m", help="add the possibility to modify the state of a fact at the end of the process", action="store_true")
-    parser.add_argument("--visual", "-v", help="Reasoning visualisation", action="store_true")
+    parser.add_argument("--visual", "-v", help="shell visualisation of the rule's trees", action="store_true")
+    parser.add_argument("--display_trees", "-d", help="Diplay each rule's trees", action="store_true")
     args = parser.parse_args()
 
     return args
@@ -189,7 +190,7 @@ def parse_input(params, env):
 
     env.init_rules() ### Init the rules obj with dict  key = rules string and value = None
     
-    create_rules_trees(env)
+    create_rules_trees(params, env)
 
     ### End of parsing
 
