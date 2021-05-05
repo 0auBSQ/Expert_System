@@ -1,7 +1,7 @@
 import lark
 from srcs.display_tree import visu_tree, print_tree
 
-def create_rules_trees(env):
+def create_rules_trees(params, env):
     ### Pour acceder a la mémoire de l'arbre
     ### https://lark-parser.readthedocs.io/en/latest/classes.html#tree
 
@@ -30,6 +30,8 @@ def create_rules_trees(env):
     p = lark.Lark(grammar, priority='decay')
     for element in env.adj_matrix.columns.values:
         env.rules.dict[element] = p.parse(element)
-        print_tree(env.rules.dict[element]) ## Print the rules's tree in terminal
-        visu_tree(env.rules.dict[element]) ## Display the rule's tree
+        if params.visual:
+            print_tree(env.rules.dict[element]) ## Print the rules's tree in terminal
+        if params.display:
+            visu_tree(env.rules.dict[element]) ## Display the rule's tree
     
