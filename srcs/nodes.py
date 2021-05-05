@@ -8,11 +8,11 @@ def create_rules_trees(env):
     grammar = """
         start: operation ARROW operation
         leaf: LETTER
-        parenthesis.6: "(" operation ")"
-        unary.5: "!" operation
+        parenthesis.-2: "(" operation ")"
+        unary.-1: "!" operation
         and.4: operation AND operation
-        or.3: operation OR operation
-        xor.2: operation XOR operation
+        or.5: operation OR operation
+        xor.6: operation XOR operation
         operation: parenthesis
             | unary
             | and
@@ -27,9 +27,9 @@ def create_rules_trees(env):
         LETTER: /[A-Z]+/
         %ignore " "
     """
-    p = lark.Lark(grammar)
+    p = lark.Lark(grammar, priority='decay')
     for element in env.adj_matrix.columns.values:
         env.rules.dict[element] = p.parse(element)
-        #print_tree(env.rules.dict[element]) ## Print the rules's tree in terminal
-        # visu_tree(env.rules.dict[element]) ## Display the rule's tree
+        print_tree(env.rules.dict[element]) ## Print the rules's tree in terminal
+        visu_tree(env.rules.dict[element]) ## Display the rule's tree
     
