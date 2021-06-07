@@ -2,6 +2,7 @@ import argparse
 import pandas as pd
 import sys
 import re
+import copy
 
 from srcs.const import *
 from srcs.nodes import *
@@ -21,12 +22,16 @@ def add_facts(facts, line):
     """
         Iterate over the line, skip the first character and check if there is a '!', in this case the fact will be set or re-set as FALSE
         in the orther case facts will be TRUE
+        <$ added : define a fact as FALSE_UNSET>
     """
     i = 1
     length = len(line)
     while i < length:
         if line[i] == '!':
             facts.dict[line[i+1]] = facts.enum['FALSE']
+            i += 2
+        elif line[i] == '$':
+            facts.dict[line[i+1]] = facts.enum['FALSE_UNSET']
             i += 2
         else :
             facts.dict[line[i]] = facts.enum['TRUE']
@@ -173,7 +178,7 @@ def parse_stdin(env):
             Nothing
     """
 
-    print(SAKURA, "\nPlease enter your sets of Rules, Facts and Queries")
+    print(SAKURA, "\nPlease enter your sets of Rules, Facts, Queries or all your modifications")
     print("Write \";;\" when you're done !\n", DEFAULT)
 
     while True:
@@ -184,10 +189,12 @@ def parse_stdin(env):
 
 
 
-def parse_input(params, env):
+def parse_input(params, env, first_iter):
 
     # matrix indexes pre-set so we just have to add columns
-    if params.file:
+    if env.facts.facts_copy != None:
+        env.facts.dict = env.facts.facts_copy
+    if params.file and first_iter:
         parse_file(params, env)
     else:
         parse_stdin(env)
@@ -195,5 +202,6 @@ def parse_input(params, env):
     env.init_rules() ### Init the rules obj with dict  key = rules string and value = None
 
     create_rules_trees(params, env)
+    env.facts.facts_copy = copy.deepcopy(env.facts.dict) ### Save facts states before solving
 
     ### End of parsing

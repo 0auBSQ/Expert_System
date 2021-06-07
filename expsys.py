@@ -15,8 +15,19 @@ def main():
     facts = Facts()
     rules = Rules()
     env = Env(facts, rules, adj_matrix)
-    
-    parse_input(params, env)
+
+    first_iter = True
+    while params.modify or first_iter:
+        parse_input(params, env, first_iter)
+        first_iter = False
+
+        if params.modify:
+            print(SAKURA, "\nDo you want to modify inputs ? [yes / no]", DEFAULT)
+            input_ = input()
+            if input_ == "no":
+                break
+
+
 
 if __name__ == "__main__":
     main()

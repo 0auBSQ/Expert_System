@@ -49,6 +49,7 @@ class Facts():
     def __init__(self):
         self.enum = Enum('state', 'FALSE_UNSET, FALSE, TRUE, UNDEFINED')
         self.dict = self.init_facts()
+        self.facts_copy = None
 
     def init_facts(self):
         facts = {}
