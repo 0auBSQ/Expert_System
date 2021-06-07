@@ -57,8 +57,12 @@ def add_rules_in_matrix(matrix, line):
         Add a column in the matrix called by the value of 'line'
         and set 0 or 1 in the column depend if the fact is present or not in the 'line'
     """
+    if re.match('^.<=>.$', line):
+        facts_list = re.findall(r'[A-Z]', line) ### Store all A-Z in a list to iter on it
+    else:
+        facts_list = re.findall(r'[A-Z]', re.split(r'=>', line)[1])
     matrix[line] = 0
-    facts_list = re.findall(r'[A-Z]', line) ### Store all A-Z in a list to iter on it
+    # facts_list = re.findall(r'[A-Z]', line) ### Store all A-Z in a list to iter on it
     for fact in facts_list:
         matrix[line].loc[fact] = 1
 
@@ -87,7 +91,7 @@ def check_left_right_rules(line):
     splitted = re.split(r'=>|<=>', line) ## cut the line in two part
 
     ### Check number of implies (only one accepted)
-    if len(splitted) != 2: 
+    if len(splitted) != 2:
         return line, "A rule can only implie once"
 
     ### Check parsing for each side
@@ -105,7 +109,7 @@ def check_left_right_rules(line):
 
     return None, None
 
-    
+
 
 def parse_line(env, line):
     """
@@ -115,7 +119,7 @@ def parse_line(env, line):
             env : class Env()
             line : string (represent a line of the input)
     """
-    
+
     # Remove useless part of the string, white spaces and new lines
     line = line.split("#")[0].replace(" ", "").replace("\n", "")
 
@@ -135,7 +139,7 @@ def parse_line(env, line):
 
     elif line == "":
         pass
-    
+
     else:
         print("\nBad line : ", RED, line, DEFAULT,"\n")
         sys.exit()
@@ -168,7 +172,7 @@ def parse_stdin(env):
         return :
             Nothing
     """
-    
+
     print(SAKURA, "\nPlease enter your sets of Rules, Facts and Queries")
     print("Write \";;\" when you're done !\n", DEFAULT)
 
@@ -181,7 +185,7 @@ def parse_stdin(env):
 
 
 def parse_input(params, env):
-    
+
     # matrix indexes pre-set so we just have to add columns
     if params.file:
         parse_file(params, env)
@@ -189,8 +193,7 @@ def parse_input(params, env):
         parse_stdin(env)
 
     env.init_rules() ### Init the rules obj with dict  key = rules string and value = None
-    
+
     create_rules_trees(params, env)
 
     ### End of parsing
-
