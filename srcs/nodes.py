@@ -36,4 +36,4 @@ def create_rules_trees(params, env):
             visu_tree(env.rules.dict[element]) ## Display the rule's tree
     print(env.adj_matrix)
     ## print(env.rules.dict)
-    print(env.rules.dict['A+B=>C'])
+    # print(env.rules.dict['A+B=>C'])
