@@ -3,7 +3,7 @@ from enum import Enum
 
 class Setup():
     """
-        Class used to store all the setup with : 
+        Class used to store all the setup with :
             modify : Bool (accept or not to start again the same process with new facts and queries)
             visual : Bool (activate the visual mod to describe each step of the solver)
             file : String (path of the input file (if no path given, we read on the STDIN))
@@ -25,7 +25,7 @@ class Env():
             rules : TODO
 
     """
-    
+
     def __init__(self, facts, rules, adj_matrix):
         self.facts = facts
         self.rules = rules
@@ -47,13 +47,13 @@ class Facts():
     """
 
     def __init__(self):
-        self.enum = Enum('state', 'FALSE, TRUE, UNDEFINED')
+        self.enum = Enum('state', 'FALSE_UNSET, FALSE, TRUE, UNDEFINED')
         self.dict = self.init_facts()
 
     def init_facts(self):
         facts = {}
         for elem in ALL_FACTS:
-            facts[elem] = self.enum['FALSE']
+            facts[elem] = self.enum['FALSE_UNSET']
         return facts
 
 class Rules():
