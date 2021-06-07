@@ -57,7 +57,7 @@ def add_rules_in_matrix(matrix, line):
         Add a column in the matrix called by the value of 'line'
         and set 0 or 1 in the column depend if the fact is present or not in the 'line'
     """
-    if re.match('^.<=>.$', line):
+    if re.match('^.*<=>.*$', line):
         facts_list = re.findall(r'[A-Z]', line) ### Store all A-Z in a list to iter on it
     else:
         facts_list = re.findall(r'[A-Z]', re.split(r'=>', line)[1])
