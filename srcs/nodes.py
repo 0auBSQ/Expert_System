@@ -1,5 +1,6 @@
 import lark
 import re
+from srcs.const import *
 from srcs.display_tree import visu_tree, print_tree
 from lark import Tree, Token
 
@@ -222,6 +223,24 @@ def eval_tree(env, rule, fact, two_sided = False):
 	# Return final state
 	return (final_right_state)
 
+def retrieve_color_seq(env, state):
+	if (is_falsy(env, state)):
+		return RED
+	elif (is_true(env, state)):
+		return GREEN
+	return GRAY
+
+def execute_queries(env):
+	try:
+		print(GREEN,"\n === EXECUTION ===", DEFAULT,"\n")
+		for q in env.queries:
+			establish_if_not_established(env, q)
+			color = retrieve_color_seq(env, env.facts.dict[q])
+			print(q + " : " + color + env.facts.dict[q].name + DEFAULT)
+		print(GREEN,"\n ====== END ======", DEFAULT,"\n")
+	except RecursionError:
+		print("\nHmm... :", SAKURA, "Looks like your execution is stuck into a loop, try expliciting some facts.", DEFAULT,"\n")
+
 def create_rules_trees(params, env):
     ### Pour acceder a la mémoire de l'arbre
     ### https://lark-parser.readthedocs.io/en/latest/classes.html#tree
@@ -255,13 +274,12 @@ def create_rules_trees(params, env):
             print_tree(env.rules.dict[element]) ## Print the rules's tree in terminal
         if params.display:
             visu_tree(env.rules.dict[element]) ## Display the rule's tree
-        print(element)
+        #print(element)
 
-    for q in env.queries:
-        establish_if_not_established(env, q)
-        print(q + " : " + env.facts.dict[q].name)
-    print(env.facts.dict)
-        #eval_tree(env, element, 'A')
+    execute_queries(env)
+
+	#print(env.facts.dict)
+    #eval_tree(env, element, 'A')
 
 
 	# print(env.adj_matrix)
