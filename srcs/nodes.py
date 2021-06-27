@@ -186,8 +186,13 @@ def apply_boolean(env, lhs, rhs):
 #	current_fact_state = env.facts.dict[fact]
 
 
-def establish_if_not_established(env, fact_curr):
+def establish_if_not_established(env, fact_curr, children = False):
+	"""
+		Determine recursively the necessary facts
+	"""
 	if (env.facts.dict[fact_curr] == env.facts.enum['FALSE_UNSET']):
+		if (env.verbose == True and children == True):
+			print(GRAY + "CHECK > '" +  YELLOW + fact_curr + GRAY + "' is asked but unset, retrieving in process..." + DEFAULT)
 		states_list = []
 		ruleset = env.adj_matrix.loc[fact_curr, :]
 		ruleset_pruned = ruleset[ruleset != 0]
@@ -203,22 +208,31 @@ def establish_if_not_established(env, fact_curr):
 
 ### Todo : "<=>" operator
 def eval_tree(env, rule, fact, two_sided = False):
+	# Verbose
+	if (env.verbose == True):
+		print("Searching '" + YELLOW + fact + DEFAULT + "' using the rule '" + BLUE + rule + DEFAULT + "'...")
 	# Establish the state for every unset states within the facts dict
 	facts_list = re.findall(r'[A-Z]', re.split(r'=>', rule)[0])
 	for fact_curr in facts_list:
-		establish_if_not_established(env, fact_curr)
+		establish_if_not_established(env, fact_curr, True)
 	# Tree traversal, get left and right composents
 	tree = env.rules.dict[rule]
 	sign = tree.children[1]
 	left_result = eval_expression_recursively(env, tree.children[0])
-	if (two_sided == True):
-		right_result = eval_expression_recursively(env, tree.children[2])
+	#if (two_sided == True):
+	#	right_result = eval_expression_recursively(env, tree.children[2])
 	# Right paths
 	all_paths.clear()
 	get_tree_path(env, fact, tree.children[2])
 	state = extract_state(env)
 	# Apply right to left
 	final_right_state = apply_boolean(env, left_result, state)
+
+	# Additional verbose
+	if (env.verbose == True):
+		print(GRAY + "EVAL > LHS is " + retrieve_color_seq(env, left_result) + left_result.name + GRAY + " in '" + BLUE + rule + GRAY + "'." + DEFAULT)
+		print(GRAY + "EVAL > RHS factor is " + retrieve_color_seq(env, state) + state.name + GRAY + " in '" + BLUE + rule + GRAY + "'." + DEFAULT)
+		print("'" + YELLOW + fact + DEFAULT + "' is established to " + retrieve_color_seq(env, final_right_state) + final_right_state.name + DEFAULT + " using the rule '" + BLUE + rule + DEFAULT + "'.")
 
 	# Return final state
 	return (final_right_state)
@@ -235,6 +249,8 @@ def execute_queries(env):
 		print(GREEN,"\n === EXECUTION ===", DEFAULT,"\n")
 		for q in env.queries:
 			establish_if_not_established(env, q)
+		print("")
+		for q in env.queries:
 			color = retrieve_color_seq(env, env.facts.dict[q])
 			print(q + " : " + color + env.facts.dict[q].name + DEFAULT)
 		print(GREEN,"\n ====== END ======", DEFAULT,"\n")

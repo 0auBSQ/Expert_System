@@ -31,6 +31,7 @@ class Env():
         self.rules = rules
         self.adj_matrix = adj_matrix
         self.queries = []
+        self.verbose = True
 
     def init_rules(self):
         for elem in self.adj_matrix.columns.values:
