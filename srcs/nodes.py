@@ -144,7 +144,7 @@ def factorise_states(env, states):
 			nb_false += 1
 	if (nb_false > 0 and nb_true == 0):
 		return (env.facts.enum['FALSE'])
-	elif (nb_true > 0 and nb_false == 0):
+	elif (nb_true > 0):# and nb_false == 0):
 		return (env.facts.enum['TRUE'])
 	return (env.facts.enum['UNDEFINED'])
 
