@@ -1,21 +1,8 @@
 import lark
-
-
-from srcs.execute import *
-
 from srcs.display_tree import visu_tree, print_tree
 from lark import Tree, Token
 
-
-
-
-
-
-#def apply_fact(env, fact, state):
-#	current_fact_state = env.facts.dict[fact]
-
-
-
+from srcs.execute import *
 
 def create_rules_trees(params, env):
     ### Pour acceder a la mémoire de l'arbre
@@ -50,16 +37,5 @@ def create_rules_trees(params, env):
             print_tree(env.rules.dict[element]) ## Print the rules's tree in terminal
         if params.display:
             visu_tree(env.rules.dict[element]) ## Display the rule's tree
-        #print(element)
 
     execute_queries(env)
-
-	#print(env.facts.dict)
-    #eval_tree(env, element, 'A')
-
-
-	# print(env.adj_matrix)
-    ## print(env.rules.dict)
-    # print(env.rules.dict['A+B=>C'].children[0])
-    # print(env.facts.dict)
-    # print(env.facts.dict['F'] == env.facts.enum['FALSE'])
