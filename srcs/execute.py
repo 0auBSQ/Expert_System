@@ -1,7 +1,13 @@
 from srcs.eval import *
 from srcs.const import *
 
+
 def execute_queries(env):
+	"""
+		Execute the backward chaining engine using the env configuration.
+		Only edits the facts dictionnary.
+		If infinite loop an error is triggered without quitting the program.
+	"""
 	try:
 		print(GREEN,"\n === EXECUTION ===", DEFAULT,"\n")
 		for q in env.queries:

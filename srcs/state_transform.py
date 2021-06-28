@@ -1,6 +1,7 @@
 from srcs.state_operations import *
 from srcs.const import *
 
+
 def factorise_states(env, states):
 	"""
 		Factorise the resulting states to an unique global state
@@ -17,6 +18,7 @@ def factorise_states(env, states):
 	elif (nb_true > 0):# and nb_false == 0):
 		return (env.facts.enum['TRUE'])
 	return (env.facts.enum['UNDEFINED'])
+
 
 def extract_state(env, all_paths):
 	"""
@@ -39,7 +41,11 @@ def extract_state(env, all_paths):
 	# Get the final (global) state conv for the given fact
 	return (factorise_states(env, states))
 
+
 def apply_boolean(env, lhs, rhs):
+	"""
+		Boolean product doing a XNOR operation
+	"""
 	if (lhs == env.facts.enum['UNDEFINED'] or rhs == env.facts.enum['UNDEFINED']):
 		return (env.facts.enum['UNDEFINED'])
 	elif (is_true(env, lhs)):
@@ -51,7 +57,14 @@ def apply_boolean(env, lhs, rhs):
 			return (env.facts.enum['FALSE'])
 	return (env.facts.enum['TRUE'])
 
+
 def retrieve_color_seq(env, state):
+	"""
+		Return an escape sequence string representing a different color depending on the state :
+		False => RED
+		True => GREEN
+		Undefined => GRAY
+	"""
 	if (is_falsy(env, state)):
 		return RED
 	elif (is_true(env, state)):

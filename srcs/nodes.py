@@ -4,6 +4,7 @@ from lark import Tree, Token
 
 from srcs.execute import *
 
+
 def create_rules_trees(params, env):
     ### Pour acceder a la mémoire de l'arbre
     ### https://lark-parser.readthedocs.io/en/latest/classes.html#tree

@@ -1,26 +1,34 @@
 def is_falsy(env, fact):
 	return (fact == env.facts.enum['FALSE'] or fact == env.facts.enum['FALSE_UNSET'])
 
+
 def is_true(env, fact):
 	return (fact == env.facts.enum['TRUE'])
+
 
 def is_undefined(env, fact):
 	return (fact == env.facts.enum['UNDEFINED'])
 
+
 def has_an_undefined_member(status):
 	return (status % 10 == 2)
+
 
 def both_are_identical(status):
 	return (status % 10 == status // 10)
 
+
 def at_least_a_true(status):
 	return (status // 10 == 1)
+
 
 def both_are_true(status):
 	return (status == 11)
 
+
 def at_least_a_false(status):
 	return (status != 11 and status != 22 and status != 12)
+
 
 # Every logical operation here are commutative, so we treat both combinations at once
 def get_setting(env, left, right):

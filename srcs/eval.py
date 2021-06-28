@@ -3,6 +3,10 @@ from srcs.const import *
 from srcs.state_transform import *
 from srcs.state_operations import *
 
+
+all_paths = []
+
+
 # This function could be divided into multiple classes (1 per operation containing an eval method), but it feels overkill for a small project like this one
 def eval_expression_recursively(env, node):
 	"""
@@ -59,9 +63,8 @@ def eval_expression_recursively(env, node):
 		return env.facts.enum['UNDEFINED']
 	return env.facts.enum['FALSE']
 
-all_paths = []
 
-def get_tree_path(env, fact, node, dt = []):
+def get_tree_path(env, fact, node, dt=[]):
 	"""
 		Get all paths for a given fact within the parsing tree
 	"""
@@ -87,7 +90,8 @@ def get_tree_path(env, fact, node, dt = []):
 		left_path = get_tree_path(env, fact, left_node, dt + [ope_type])
 		right_path = get_tree_path(env, fact, right_node, dt + [ope_type])
 
-def establish_if_not_established(env, fact_curr, children = False):
+
+def establish_if_not_established(env, fact_curr, children=False):
 	"""
 		Determine recursively the necessary facts
 	"""
@@ -107,8 +111,12 @@ def establish_if_not_established(env, fact_curr, children = False):
 			#print(factorised)
 			env.facts.dict[fact_curr] = factorised
 
+
 ### Todo : "<=>" operator
-def eval_tree(env, rule, fact, two_sided = False):
+def eval_tree(env, rule, fact, two_sided=False):
+	"""
+		Eval the parsing tree recursively.
+	"""
 	# Verbose
 	if (env.verbose == True):
 		print("Searching '" + YELLOW + fact + DEFAULT + "' using the rule '" + BLUE + rule + DEFAULT + "'...")
