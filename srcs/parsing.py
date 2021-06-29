@@ -178,7 +178,8 @@ def parse_file(params, env):
     except: print("\nFile :  [", RED, params.file, DEFAULT, "]  ==> does not exist\n"); sys.exit()
 
     # read the file line by line and send the line to a parsing function which will fill our data structure once it's well parsed
-    lines = file_.readlines()
+    try: lines = file_.readlines()
+    except: print(RED, "\nYou tried to read dev/random ? You thought I was a pigeon ? Come on bland clown.\n", DEFAULT); sys.exit()
     for line in lines:
         parse_line(env, line)
 
