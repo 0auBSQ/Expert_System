@@ -91,29 +91,7 @@ def get_tree_path(env, fact, node, dt=[]):
 		right_path = get_tree_path(env, fact, right_node, dt + [ope_type])
 
 
-def establish_if_not_established(env, fact_curr, children=False):
-	"""
-		Determine recursively the necessary facts
-	"""
-	if (env.facts.dict[fact_curr] == env.facts.enum['FALSE_UNSET']):
-		if (env.verbose == True and children == True):
-			print(GRAY + "CHECK > '" +  YELLOW + fact_curr + GRAY + "' is asked but unset, retrieving in process..." + DEFAULT)
-		states_list = []
-		ruleset = env.adj_matrix.loc[fact_curr, :]
-		ruleset_pruned = ruleset[ruleset != 0]
-		if (ruleset_pruned.size == 0):
-			env.facts.dict[fact_curr] = env.facts.enum['FALSE']
-		else:
-			for index, value in ruleset_pruned.items():
-				states_list.append(eval_tree(env, index, fact_curr))
-			#print(states_list)
-			factorised = factorise_states(env, states_list)
-			#print(factorised)
-			env.facts.dict[fact_curr] = factorised
-
-
-### Todo : "<=>" operator
-def eval_tree(env, rule, fact, two_sided=False):
+def eval_tree(env, rule, fact, uncertain):
 	"""
 		Eval the parsing tree recursively.
 	"""
@@ -123,13 +101,11 @@ def eval_tree(env, rule, fact, two_sided=False):
 	# Establish the state for every unset states within the facts dict
 	facts_list = re.findall(r'[A-Z]', re.split(r'=>', rule)[0])
 	for fact_curr in facts_list:
-		establish_if_not_established(env, fact_curr, True)
+		establish_if_not_established(env, fact_curr, uncertain, True, fact)
 	# Tree traversal, get left and right composents
 	tree = env.rules.dict[rule]
 	sign = tree.children[1]
 	left_result = eval_expression_recursively(env, tree.children[0])
-	#if (two_sided == True):
-	#	right_result = eval_expression_recursively(env, tree.children[2])
 	# Right paths
 	all_paths.clear()
 	get_tree_path(env, fact, tree.children[2])
@@ -145,3 +121,37 @@ def eval_tree(env, rule, fact, two_sided=False):
 
 	# Return final state
 	return (final_right_state)
+
+
+visited = dict()
+
+
+def establish_if_not_established(env, fact_curr, uncertain, children=False, parent=None):
+	"""
+		Determine recursively the necessary facts
+	"""
+	if (children == False):
+		visited.clear()
+	if (env.facts.dict[fact_curr] == env.facts.enum['FALSE_UNSET']):
+		# Loop checker
+		if (fact_curr in visited):
+			if (env.verbose == True):
+				print("\nHmm... :", SAKURA, "Fact '" + YELLOW + fact_curr + SAKURA + "' is catched into a loop, ignored.", DEFAULT,"\n")
+			uncertain.append(parent)
+			return None
+		visited[fact_curr] = 1
+
+		if (env.verbose == True and children == True):
+			print(GRAY + "CHECK > '" +  YELLOW + fact_curr + GRAY + "' is asked but unset, retrieving in process..." + DEFAULT)
+		states_list = []
+		ruleset = env.adj_matrix.loc[fact_curr, :]
+		ruleset_pruned = ruleset[ruleset != 0]
+		if (ruleset_pruned.size == 0):
+			env.facts.dict[fact_curr] = env.facts.enum['FALSE']
+		else:
+			for index, value in ruleset_pruned.items():
+				states_list.append(eval_tree(env, index, fact_curr, uncertain))
+			#print(states_list)
+			factorised = factorise_states(env, states_list)
+			#print(factorised)
+			env.facts.dict[fact_curr] = factorised
