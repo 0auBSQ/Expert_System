@@ -150,7 +150,7 @@ def parse_line(env, line):
             sys.exit()
         add_rules_in_matrix(env.adj_matrix, line)
 
-    elif re.match(r'^[=]([!]?[A-Z])*$', line): ## Fact case
+    elif re.match(r'^[=]([!$~]?[A-Z])*$', line): ## Fact case
         add_facts(env.facts, line) # Set given facts as true (accept more than one line of initial facts)
 
     elif re.match(r'^[?]([!]?[A-Z])*$', line): ## Query case
