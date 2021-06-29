@@ -14,6 +14,7 @@ def parse_args():
     parser.add_argument("--modify", "-m", help="add the possibility to modify the state of a fact at the end of the process", action="store_true")
     parser.add_argument("--visual", "-v", help="shell visualisation of the rule's trees", action="store_true")
     parser.add_argument("--display_trees", "-d", help="Diplay each rule's trees", action="store_true")
+    parser.add_argument("--verbose", "-V", help="Desplay all steps during the resolution", action="store_true")
     args = parser.parse_args()
 
     return args
@@ -32,6 +33,9 @@ def add_facts(facts, line):
             i += 2
         elif line[i] == '$':
             facts.dict[line[i+1]] = facts.enum['FALSE_UNSET']
+            i += 2
+        elif line[i] == '~':
+            facts.dict[line[i+1]] = facts.enum['UNDEFINED']
             i += 2
         else :
             facts.dict[line[i]] = facts.enum['TRUE']
@@ -57,19 +61,29 @@ def add_queries(query_tab, line):
                 query_tab.append(line[i])
             i += 1
 
+
 def add_rules_in_matrix(matrix, line):
     """
         Add a column in the matrix called by the value of 'line'
         and set 0 or 1 in the column depend if the fact is present or not in the 'line'
     """
     if re.match('^.*<=>.*$', line):
+        splitted = re.split(r'<=>', line)
+        first_rule = splitted[0] + "=>" + splitted[1]
+        second_rule = splitted[1] + "=>" + splitted[0]
+        matrix[first_rule] = 0
+        matrix[second_rule] = 0
+        for fact in re.findall(r'[A-Z]', splitted[1]):
+            matrix[first_rule].loc[fact] = 1
+        for fact in re.findall(r'[A-Z]', splitted[0]):
+            matrix[second_rule].loc[fact] = 1
+
         facts_list = re.findall(r'[A-Z]', line) ### Store all A-Z in a list to iter on it
     else:
         facts_list = re.findall(r'[A-Z]', re.split(r'=>', line)[1])
-    matrix[line] = 0
-    # facts_list = re.findall(r'[A-Z]', line) ### Store all A-Z in a list to iter on it
-    for fact in facts_list:
-        matrix[line].loc[fact] = 1
+        matrix[line] = 0
+        for fact in facts_list:
+            matrix[line].loc[fact] = 1
 
 def check_parenthese(token):
     """
@@ -200,8 +214,6 @@ def parse_input(params, env, first_iter):
         parse_stdin(env)
 
     env.init_rules() ### Init the rules obj with dict  key = rules string and value = None
-
     create_rules_trees(params, env)
     env.facts.facts_copy = copy.deepcopy(env.facts.dict) ### Save facts states before solving
-
     ### End of parsing

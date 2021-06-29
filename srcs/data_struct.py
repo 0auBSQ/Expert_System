@@ -9,11 +9,12 @@ class Setup():
             file : String (path of the input file (if no path given, we read on the STDIN))
     """
 
-    def __init__(self, modify, visual, display, file_):
+    def __init__(self, modify, visual, display, file_, verb):
         self.modify = modify
         self.visual = visual
         self.display = display
         self.file = file_
+        self.verbose = verb
         pass
 
 class Env():
