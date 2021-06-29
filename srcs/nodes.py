@@ -38,5 +38,3 @@ def create_rules_trees(params, env):
             print_tree(env.rules.dict[element]) ## Print the rules's tree in terminal
         if params.display:
             visu_tree(env.rules.dict[element]) ## Display the rule's tree
-
-    # execute_queries(env)
