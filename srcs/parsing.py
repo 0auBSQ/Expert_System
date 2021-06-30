@@ -14,7 +14,7 @@ def parse_args():
     parser.add_argument("--modify", "-m", help="add the possibility to modify the state of a fact at the end of the process", action="store_true")
     parser.add_argument("--visual", "-v", help="shell visualisation of the rule's trees", action="store_true")
     parser.add_argument("--display_trees", "-d", help="Diplay each rule's trees", action="store_true")
-    parser.add_argument("--verbose", "-V", help="Desplay all steps during the resolution", action="store_true")
+    parser.add_argument("--verbose", "-V", help="Display all steps during the resolution", action="store_true")
     args = parser.parse_args()
 
     return args
