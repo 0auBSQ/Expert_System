@@ -1,6 +1,8 @@
 # Expert_System
 Backward chaining (optimised) rule-based system
 
+![my-image](https://user-images.githubusercontent.com/58159635/124013045-1e5a4200-d9e2-11eb-9ac8-79820ed865eb.png)
+
 ## Starring
 
 - rmarracc : https://github.com/0auBSQ
